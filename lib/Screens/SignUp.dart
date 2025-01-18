@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:medhir/Screens/Login.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -62,9 +63,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Stack(
@@ -72,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           // Gradient Background
           Container(
             width: double.infinity,
-            height: screenHeight,
+            height: 1.sh,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [Color(0xFF0B2A2F), Color(0xFF14444F)],
@@ -81,30 +79,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24.0),
+              padding: EdgeInsets.all(24.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: screenHeight * 0.05),
+                  SizedBox(height: 50.h),
                   Text(
                     'Sign Up',
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      fontSize: screenWidth * 0.09,
+                      fontSize: 32.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[400],
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.01),
+                  SizedBox(height: 10.h),
                   Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
+                    padding: EdgeInsets.only(left: 10.w),
                     child: Row(
                       children: [
                         Text(
                           'Already Registered? ',
                           style: TextStyle(
                             color: Colors.grey,
-                            fontSize: screenWidth * 0.04,
+                            fontSize: 14.sp,
                           ),
                         ),
                         GestureDetector(
@@ -119,22 +117,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             style: TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,
-                              fontSize: screenWidth * 0.04,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.02),
+                  SizedBox(height: 20.h),
                   Center(
                     child: Image.asset(
                       'assets/illustration2.png',
-                      width: screenWidth * 0.7,
-                      height: screenHeight * 0.25,
+                      width: 0.7.sw,
+                      height: 0.25.sh,
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.02),
+                  SizedBox(height: 20.h),
                   Form(
                     key: _formKey,
                     child: Column(
@@ -144,21 +142,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           hintText: 'Name',
                           icon: Icons.person_outline,
                         ),
-                        SizedBox(height: screenHeight * 0.02),
+                        SizedBox(height: 20.h),
                         _buildInputField(
                           controller: _emailController,
                           hintText: 'Email',
                           icon: Icons.email_outlined,
                           keyboardType: TextInputType.emailAddress,
                         ),
-                        SizedBox(height: screenHeight * 0.02),
+                        SizedBox(height: 20.h),
                         _buildInputField(
                           controller: _passwordController,
                           hintText: 'Password',
                           icon: Icons.lock_outline,
                           obscureText: true,
                         ),
-                        SizedBox(height: screenHeight * 0.02),
+                        SizedBox(height: 20.h),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -166,24 +164,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             style: TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,
-                              fontSize: screenWidth * 0.04,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ),
-                        SizedBox(height: screenHeight * 0.03),
+                        SizedBox(height: 30.h),
                         SizedBox(
-                          width: screenWidth * 0.7,
+                          width: 0.7.sw,
                           child: ElevatedButton(
                             onPressed: _submitForm,
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
-                                Color(0xFF003566),
+                                Color(0xFFFFCC00),
                               ),
                               foregroundColor: MaterialStateProperty.all(Colors.white),
-                              minimumSize: MaterialStateProperty.all(Size(double.infinity, 50)),
+                              minimumSize: MaterialStateProperty.all(Size(double.infinity, 50.h)),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
+                                  borderRadius: BorderRadius.circular(30.r),
                                 ),
                               ),
                             ),
@@ -193,15 +191,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 Text(
                                   'Sign Up',
                                   style: TextStyle(
-                                    fontSize: screenWidth * 0.05,
-                                    color: Colors.white,
+                                    fontSize: 16.sp,
+                                    color: Color(0xFF000000),
                                   ),
                                 ),
-                                SizedBox(width: screenWidth * 0.02),
+                                SizedBox(width: 10.w),
                                 Icon(
                                   Icons.arrow_forward,
-                                  size: screenWidth * 0.07,
-                                  color: Colors.white,
+                                  size: 24.sp,
+                                  color: Colors.black,
                                 ),
                               ],
                             ),
@@ -237,11 +235,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         hintStyle: TextStyle(color: Colors.grey[600]),
         prefixIcon: Icon(icon, color: Colors.black),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(30.r),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
       ),
-      style: TextStyle(fontSize: 16, color: Colors.black),
+      style: TextStyle(fontSize: 14.sp, color: Colors.black),
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter $hintText';

@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter_screenutil: ^5.8.3
   http: ^1.2.2
   shared_preferences: ^2.0.7
   flutter_native_splash: ^2.2.13
@@ -59,7 +60,6 @@ flutter:
 
   assets:
     - assets/sample.jpg
-    - assets/logo.jpg
     - assets/illustration.png
     - assets/illustration1.png
     - assets/illustration2.png
@@ -120,7 +120,6 @@ flutter_native_splash:
     background_image: assets/splash.jpg # Fullscreen background for Android 12+
     color: "#ffffff" # Background color for Android 12+
     color_dark: "#d4e4ed" # Background color for Android 12+ dark mode
-    image_dark: assets/logo.jpg # Logo for dark mode
 
 
   web: false

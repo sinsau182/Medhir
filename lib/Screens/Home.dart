@@ -3,45 +3,20 @@ import 'package:provider/provider.dart';
 import 'package:medhir/Screens/Login.dart';
 import 'package:medhir/Screens/SignUp.dart';
 import 'package:medhir/ThemeNotifier.dart';
-
-void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeNotifier(),
-      child: MyApp(),
-    ),
-  );
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final themeNotifier = Provider.of<ThemeNotifier>(context);
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
-      themeMode: themeNotifier.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
-      home: HomeScreen(),
-    );
-  }
-}
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
 
     // Define gradients for light and dark themes
     final lightGradient = LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [
-        Color(0xFF0b2a2f), // Light theme top color
-        Color(0xFF14444F), // Light theme bottom color
+        Color(0xFF0b2a2f),
+        Color(0xFF14444F),
       ],
     );
 
@@ -49,8 +24,8 @@ class HomeScreen extends StatelessWidget {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [
-        Color(0xFF424242), // Lighter gray top color
-        Color(0xFF2C2C2C), // Slightly lighter gray bottom color
+        Color(0xFF424242),
+        Color(0xFF2C2C2C),
       ],
     );
 
@@ -61,45 +36,44 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            // Header with brand name and theme toggle button
+            // Header with brand name
             Positioned(
-              top: screenHeight * 0.08,
-              left: screenWidth * 0.1,
-              right: screenWidth * 0.1,
+              top: 60.h, // Adjusted for screen height
+              left: 40.w, // Adjusted for screen width
+              right: 40.w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "MEDHIR",
                     style: TextStyle(
-                      fontSize: 26.0, // Large font size for boldness
-                      fontWeight: FontWeight.bold, // Heavy weight for authenticity
-                      color: Color(0xFFF5F5DC), // Off-white text color (Beige tone)
-                      letterSpacing: 3.0, // Adds space for a premium feel
+                      fontSize: 26.sp, // Responsive font size
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFF5F5DC),
+                      letterSpacing: 3.sp,
                       shadows: [
                         Shadow(
-                          offset: Offset(3.0, 3.0),
-                          blurRadius: 8.0,
-                          color: Colors.black.withOpacity(0.6), // Subtle shadow
+                          offset: Offset(3.w, 3.h),
+                          blurRadius: 8.r,
+                          color: Colors.black.withOpacity(0.6),
                         ),
                         Shadow(
-                          offset: Offset(-2.0, -2.0),
-                          blurRadius: 6.0,
-                          color: Colors.white.withOpacity(0.2), // Highlight effect
+                          offset: Offset(-2.w, -2.h),
+                          blurRadius: 6.r,
+                          color: Colors.white.withOpacity(0.2),
                         ),
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
 
             // Tagline text
             Positioned(
-              top: screenHeight * 0.25,
-              left: screenWidth * 0.1,
-              right: screenWidth * 0.1,
+              top: 200.h,
+              left: 40.w,
+              right: 40.w,
               child: GradientText(
                 "RUN YOUR BUSINESS\nNOT THE HASSLE",
                 gradient: LinearGradient(
@@ -117,26 +91,25 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            // Illustration (Updated with the new image)
+            // Illustration
             Positioned(
-              top: screenHeight * 0.32,
-              left: screenWidth * 0.10,
-              right: screenWidth * 0.10,
+              top: 260.h,
+              left: 40.w,
+              right: 40.w,
               child: Image.asset(
-                'assets/rocket.png', // Replace with your uploaded image path
-                height: screenHeight * 0.40,
+                'assets/rocket.png',
+                height: 300.h, // Adjusted for screen height
                 fit: BoxFit.contain,
               ),
             ),
 
             // Buttons
             Positioned(
-              bottom: screenHeight * 0.1,
-              left: screenWidth * 0.1,
-              right: screenWidth * 0.1,
+              bottom: 100.h,
+              left: 40.w,
+              right: 40.w,
               child: Column(
                 children: [
-                  // Login Button
                   TextButtonWidget(
                     text: "Login",
                     onPressed: () {
@@ -146,8 +119,7 @@ class HomeScreen extends StatelessWidget {
                       );
                     },
                   ),
-                  SizedBox(height: 20),
-                  // Sign Up Button
+                  SizedBox(height: 20.h),
                   TextButtonWidget(
                     text: "Sign Up",
                     onPressed: () {
@@ -180,25 +152,25 @@ class TextButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50, // Button height
-      width: double.infinity, // Stretch to full width
+      height: 50.h,
+      width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFC0C0C0), // Light background color
+          backgroundColor: Color(0xFFC0C0C0),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30), // Smooth rounded corners
+            borderRadius: BorderRadius.circular(30.r),
           ),
-          elevation: 4, // Subtle shadow for depth
-          padding: EdgeInsets.symmetric(horizontal: 20), // Padding inside the button
+          elevation: 4,
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
         ),
         onPressed: onPressed,
         child: Text(
           text,
-          textAlign: TextAlign.center, // Center the text
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: "Poppins",
-            fontSize: 16,
-            color: Colors.grey[800], // Text color
+            fontSize: 16.sp,
+            color: Colors.grey[800],
           ),
         ),
       ),
@@ -225,7 +197,7 @@ class GradientText extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: 'Montserrat',
-          fontSize: 22,
+          fontSize: 22.sp,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
