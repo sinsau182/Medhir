@@ -103,6 +103,10 @@ flutter:
         - asset: fonts/Merriweather-Bold.ttf
           weight: 700
 
+#    - family: Sagona Book
+#      fonts:
+#        - asset: assets/fonts/SagonaBook.ttf
+
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

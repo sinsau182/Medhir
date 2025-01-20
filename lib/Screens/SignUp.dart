@@ -11,20 +11,27 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   final String _registerUrl = 'http://13.201.224.161:5000/register';
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      _registerUser();
+      if (_passwordController.text == _confirmPasswordController.text) {
+        _registerUser();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Passwords do not match')),
+        );
+      }
     }
   }
 
   Future<void> _registerUser() async {
-    final String name = _nameController.text;
+    final String username = _usernameController.text;
     final String email = _emailController.text;
     final String password = _passwordController.text;
 
@@ -33,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Uri.parse(_registerUrl),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
-          'name': name,
+          'username': username,
           'email': email,
           'password': password,
         }),
@@ -65,46 +72,169 @@ class _SignUpScreenState extends State<SignUpScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
+    final lightGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Color(0xFF0A1128), Color(0xFF1B263B), Color(0xFFEAEAEA)],
+    );
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          // Gradient Background
+          // Background Gradient
           Container(
             width: double.infinity,
             height: screenHeight,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF0B2A2F), Color(0xFF14444F)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+              gradient: lightGradient,
             ),
+          ),
+          Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: screenHeight * 0.05),
-                  Text(
-                    'Sign Up',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: screenWidth * 0.09,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey[400],
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // "Sign Up" Heading
+                    Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                        foreground: Paint()
+                          ..shader = LinearGradient(
+                            colors: [
+                              Color(0xFFFFD700), // Gold
+                              Color(0xFFFFFFFF), // White
+                            ],
+                          ).createShader(Rect.fromLTWH(0, 0, 300, 100)),
+                        shadows: [
+                          Shadow(
+                            offset: Offset(3, 3),
+                            blurRadius: 6.0,
+                            color: Color(0xFF1B263B),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: screenHeight * 0.01),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: Row(
+                    SizedBox(height: screenHeight * 0.02),
+
+                    // Subtitle
+                    Text(
+                      'Welcome to Medhir Family',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 22,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.05),
+
+                    // Input Fields
+                    _buildInputField(
+                      controller: _usernameController,
+                      hintText: 'Username',
+                      icon: Icons.person_outline,
+                    ),
+                    SizedBox(height: screenHeight * 0.025),
+                    _buildInputField(
+                      controller: _emailController,
+                      hintText: 'Email',
+                      icon: Icons.email_outlined,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    SizedBox(height: screenHeight * 0.025),
+                    _buildInputField(
+                      controller: _passwordController,
+                      hintText: 'Password',
+                      icon: Icons.lock_outline,
+                      obscureText: true,
+                    ),
+                    SizedBox(height: screenHeight * 0.025),
+                    _buildInputField(
+                      controller: _confirmPasswordController,
+                      hintText: 'Confirm Password',
+                      icon: Icons.lock_outline,
+                      obscureText: true,
+                    ),
+                    SizedBox(height: screenHeight * 0.04),
+
+                    // Sign Up Button
+                    SizedBox(
+                      width: screenWidth * 0.7,
+                      child: ElevatedButton(
+                        onPressed: _submitForm,
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Color(0xFF003566)),
+                          foregroundColor: MaterialStateProperty.all(Colors.white),
+                          minimumSize: MaterialStateProperty.all(Size(double.infinity, 55)),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Or Sign Up With
+                    Text(
+                      'Or sign up with',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        color: Color(0xFFEAEAEA),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+
+                    // Social Login Buttons
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _socialLoginButton(
+                          label: 'Google',
+                          icon: Icons.g_mobiledata,
+                          onPressed: () {
+                            // Add Google sign-up logic
+                          },
+                        ),
+                        SizedBox(width: screenWidth * 0.05),
+                        _socialLoginButton(
+                          label: 'Facebook',
+                          icon: Icons.facebook,
+                          onPressed: () {
+                            // Add Facebook sign-up logic
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+
+                    // Already have an account
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Already Registered? ',
+                          'Already have an account? ',
                           style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: screenWidth * 0.04,
+                            fontSize: 14,
+                            color: Color(0xFFEAEAEA),
+                            fontFamily: 'Poppins',
                           ),
                         ),
                         GestureDetector(
@@ -115,102 +245,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             );
                           },
                           child: Text(
-                            'Sign In',
+                            'Log In',
                             style: TextStyle(
-                              color: Colors.blue,
+                              fontSize: 14,
+                              color: Color(0xFFFEA41D), // New Yellow
                               fontWeight: FontWeight.bold,
-                              fontSize: screenWidth * 0.04,
+                              fontFamily: 'Poppins',
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  Center(
-                    child: Image.asset(
-                      'assets/illustration2.png',
-                      width: screenWidth * 0.7,
-                      height: screenHeight * 0.25,
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        _buildInputField(
-                          controller: _nameController,
-                          hintText: 'Name',
-                          icon: Icons.person_outline,
-                        ),
-                        SizedBox(height: screenHeight * 0.02),
-                        _buildInputField(
-                          controller: _emailController,
-                          hintText: 'Email',
-                          icon: Icons.email_outlined,
-                          keyboardType: TextInputType.emailAddress,
-                        ),
-                        SizedBox(height: screenHeight * 0.02),
-                        _buildInputField(
-                          controller: _passwordController,
-                          hintText: 'Password',
-                          icon: Icons.lock_outline,
-                          obscureText: true,
-                        ),
-                        SizedBox(height: screenHeight * 0.02),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Forgot Password",
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                              fontSize: screenWidth * 0.04,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: screenHeight * 0.03),
-                        SizedBox(
-                          width: screenWidth * 0.7,
-                          child: ElevatedButton(
-                            onPressed: _submitForm,
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                Color(0xFF003566),
-                              ),
-                              foregroundColor: MaterialStateProperty.all(Colors.white),
-                              minimumSize: MaterialStateProperty.all(Size(double.infinity, 50)),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Sign Up',
-                                  style: TextStyle(
-                                    fontSize: screenWidth * 0.05,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(width: screenWidth * 0.02),
-                                Icon(
-                                  Icons.arrow_forward,
-                                  size: screenWidth * 0.07,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -234,12 +281,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
         filled: true,
         fillColor: Color(0xFFF8F9FA),
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.grey[600]),
+        hintStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: Colors.grey[700],
+        ),
         prefixIcon: Icon(icon, color: Colors.black),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
+          borderSide: BorderSide(color: Color(0xFF003566), width: 2),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        contentPadding: EdgeInsets.symmetric(vertical: 18.0, horizontal: 16.0),
       ),
       style: TextStyle(fontSize: 16, color: Colors.black),
       validator: (value) {
@@ -248,6 +300,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
         return null;
       },
+    );
+  }
+
+  Widget _socialLoginButton({
+    required String label,
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon, size: 24, color: Colors.white),
+      label: Text(
+        label,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Poppins',
+          color: Colors.white,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color(0xFF1B263B),
+        padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 24.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+      ),
     );
   }
 }

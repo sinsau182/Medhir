@@ -35,13 +35,14 @@ class HomeScreen extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    // Define gradients for light and dark themes
+    // Updated gradients for light and dark themes
     final lightGradient = LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [
-        Color(0xFF0b2a2f), // Light theme top color
-        Color(0xFF14444F), // Light theme bottom color
+        Color(0xFF0A1128), // Dark navy blue
+        Color(0xFF1B263B), // Lighter navy blue
+        Color(0xFFEAEAEA), // Subtle off-white
       ],
     );
 
@@ -49,8 +50,8 @@ class HomeScreen extends StatelessWidget {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [
-        Color(0xFF424242), // Lighter gray top color
-        Color(0xFF2C2C2C), // Slightly lighter gray bottom color
+        Color(0xFF1B263B), // Dark blue
+        Color(0xFF0A1128), // Dark navy blue
       ],
     );
 
@@ -61,9 +62,9 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            // Header with brand name and theme toggle button
+            // Header with brand name and theme toggle button, moved upwards
             Positioned(
-              top: screenHeight * 0.08,
+              top: screenHeight * 0.05, // Adjusted position upwards
               left: screenWidth * 0.1,
               right: screenWidth * 0.1,
               child: Row(
@@ -72,66 +73,73 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     "MEDHIR",
                     style: TextStyle(
-                      fontSize: 26.0, // Large font size for boldness
-                      fontWeight: FontWeight.bold, // Heavy weight for authenticity
-                      color: Color(0xFFF5F5DC), // Off-white text color (Beige tone)
-                      letterSpacing: 3.0, // Adds space for a premium feel
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 3.0,
                       shadows: [
                         Shadow(
-                          offset: Offset(3.0, 3.0),
-                          blurRadius: 8.0,
-                          color: Colors.black.withOpacity(0.6), // Subtle shadow
-                        ),
-                        Shadow(
-                          offset: Offset(-2.0, -2.0),
-                          blurRadius: 6.0,
-                          color: Colors.white.withOpacity(0.2), // Highlight effect
+                          offset: Offset(2.0, 2.0),
+                          blurRadius: 5.0,
+                          color: Colors.black.withOpacity(0.5),
                         ),
                       ],
                     ),
                   ),
-
+                  IconButton(
+                    icon: Icon(
+                      themeNotifier.isDarkTheme
+                          ? Icons.wb_sunny
+                          : Icons.nightlight_round,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      themeNotifier.toggleTheme();
+                    },
+                  ),
                 ],
               ),
             ),
 
-            // Tagline text
+            // Updated Tagline text, moved upwards
             Positioned(
-              top: screenHeight * 0.25,
+              top: screenHeight * 0.18, // Adjusted position upwards
               left: screenWidth * 0.1,
               right: screenWidth * 0.1,
-              child: GradientText(
+              child: Text(
                 "RUN YOUR BUSINESS\nNOT THE HASSLE",
-                gradient: LinearGradient(
-                  colors: [
-                    themeNotifier.isDarkTheme
-                        ? Colors.grey[300]!
-                        : Colors.grey[400]!,
-                    themeNotifier.isDarkTheme
-                        ? Colors.grey[500]!
-                        : Colors.grey[300]!,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Poppins', // Keeping the original font (Poppins)
+                  fontSize: 36, // Adjust the font size for readability
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white, // Set the font color to white
+                  shadows: [
+                    Shadow(
+                      offset: Offset(3.0, 3.0),
+                      blurRadius: 8.0,
+                      color: Colors.black.withOpacity(0.7),
+                    ),
                   ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
                 ),
               ),
             ),
 
-            // Illustration (Updated with the new image)
+            // Illustration, moved upwards
             Positioned(
-              top: screenHeight * 0.32,
+              top: screenHeight * 0.26, // Adjusted position upwards
               left: screenWidth * 0.10,
               right: screenWidth * 0.10,
               child: Image.asset(
-                'assets/rocket.png', // Replace with your uploaded image path
+                'assets/rocket.png', // Replace with your image path
                 height: screenHeight * 0.40,
                 fit: BoxFit.contain,
               ),
             ),
 
-            // Buttons
+            // Buttons, moved upwards
             Positioned(
-              bottom: screenHeight * 0.1,
+              bottom: screenHeight * 0.13, // Adjusted position upwards
               left: screenWidth * 0.1,
               right: screenWidth * 0.1,
               child: Column(
@@ -180,54 +188,26 @@ class TextButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50, // Button height
-      width: double.infinity, // Stretch to full width
+      height: 50,
+      width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFC0C0C0), // Light background color
+          backgroundColor: Color(0xFF1B263B), // Blue color (used in gradient)
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30), // Smooth rounded corners
+            borderRadius: BorderRadius.circular(30),
           ),
-          elevation: 4, // Subtle shadow for depth
-          padding: EdgeInsets.symmetric(horizontal: 20), // Padding inside the button
+          elevation: 8,
+          padding: EdgeInsets.symmetric(vertical: 15),
+          shadowColor: Colors.black.withOpacity(0.3),
         ),
         onPressed: onPressed,
         child: Text(
           text,
-          textAlign: TextAlign.center, // Center the text
           style: TextStyle(
             fontFamily: "Poppins",
-            fontSize: 16,
-            color: Colors.grey[800], // Text color
+            fontSize: 18,
+            color: Colors.white,
           ),
-        ),
-      ),
-    );
-  }
-}
-
-// Gradient text widget
-class GradientText extends StatelessWidget {
-  const GradientText(this.text, {Key? key, required this.gradient})
-      : super(key: key);
-
-  final String text;
-  final Gradient gradient;
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (bounds) => gradient.createShader(
-        Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-      ),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontFamily: 'Montserrat',
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
         ),
       ),
     );
