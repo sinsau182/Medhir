@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:medhir/ThemeNotifier.dart';
 import 'package:medhir/Screens/Home.dart';
+import 'package:medhir/Screens/Login.dart';
+import 'package:medhir/Screens/SignUp.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
@@ -58,7 +60,12 @@ class MyApp extends StatelessWidget {
         ),
         child: HomePage(),
       ),
+      routes: {
+        '/login': (context) => LoginPage(),  // Replace with your Login page
+        '/signup': (context) => SignUpScreen(), // Replace with your Signup page
+      },
     );
+
   }
 }
 

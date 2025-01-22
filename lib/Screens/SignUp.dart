@@ -124,15 +124,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20.h),
-                  Center(
-                    child: Image.asset(
-                      'assets/illustration2.png',
-                      width: 0.7.sw,
-                      height: 0.25.sh,
-                    ),
-                  ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 30.h),
+
+
                   Form(
                     key: _formKey,
                     child: Column(

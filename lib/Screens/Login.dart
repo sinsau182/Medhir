@@ -129,130 +129,125 @@ class _LoginPageState extends State<LoginPage> {
                     vertical: 20.h, // Proportional vertical padding
                   ),
                   child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
                       SizedBox(height: 50.h),
 
-                  // Title
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Login',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 28.sp, // Scaled font size
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[300],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 30.h),
-
-                  // Illustration image
-                  Image.asset(
-                    'assets/illustration1.png',
-                    width: 200.w,
-                    height: 200.h,
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(height: 30.h),
-
-                  // Email TextField
-                  TextFieldDecoration(
-                    controller: emailController,
-                    hintText: 'Email',
-                    prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
-                  ),
-
-                  SizedBox(height: 20.h),
-
-                  // Password TextField
-                  TextFieldDecoration(
-                    controller: passwordController,
-                    hintText: 'Password',
-                    obscureText: true,
-                    prefixIcon: Icon(Icons.lock_outline, color: Colors.grey),
-                  ),
-
-                  SizedBox(height: 30.h),
-
-                  // Login Button
-                  SizedBox(
-                    width: 0.5.sw, // Button width as 50% of screen width
-                    child: ElevatedButton(
-                        onPressed: () {
-                          String email = emailController.text.trim();
-                          String password = passwordController.text.trim();
-
-                          if (email.isNotEmpty && password.isNotEmpty) {
-                            loginUser(email, password, context);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Please fill in all fields')),
-                            );
-                          }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 204, 170, 0)),
-                          foregroundColor: MaterialStateProperty.all(Colors.white),
-                          minimumSize: MaterialStateProperty.all(Size(double.infinity, 50.h)),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0.r),
+                      // Title
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Login',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 28.sp, // Scaled font size
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[300],
                             ),
                           ),
-                        ),
-                        child: Row(
+                        ],
+                      ),
+                      SizedBox(height: 50.h),
+
+                      // Illustration image
+
+
+                      // Email TextField
+                      TextFieldDecoration(
+                        controller: emailController,
+                        hintText: 'Email',
+                        prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
+                      ),
+
+                      SizedBox(height: 20.h),
+
+                      // Password TextField
+                      TextFieldDecoration(
+                        controller: passwordController,
+                        hintText: 'Password',
+                        obscureText: true,
+                        prefixIcon: Icon(Icons.lock_outline, color: Colors.grey),
+                      ),
+
+                      SizedBox(height: 30.h),
+
+                      // Login Button
+                      SizedBox(
+                        width: 0.5.sw, // Button width as 50% of screen width
+                        child: ElevatedButton(
+                          onPressed: () {
+                            String email = emailController.text.trim();
+                            String password = passwordController.text.trim();
+
+                            // Validation check for non-empty fields
+                            if (email.isNotEmpty && password.isNotEmpty) {
+                              loginUser(email, password, context);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Please fill in all fields')),
+                              );
+                            }
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 204, 170, 0)),
+                            foregroundColor: MaterialStateProperty.all(Colors.white),
+                            minimumSize: MaterialStateProperty.all(Size(double.infinity, 50.h)),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0.r),
+                              ),
+                            ),
+                          ),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                            Text('Sign In', style: TextStyle(fontSize: 16.sp, color: Color(0xFF000000))),
-                        SizedBox(width: 8.w),
-                    Icon(Icons.arrow_forward, size: 20.sp, color: Color(0xFF000000)),
+                              Text('Sign In', style: TextStyle(fontSize: 16.sp, color: Color(0xFF000000))),
+                              SizedBox(width: 8.w),
+                              Icon(Icons.arrow_forward, size: 20.sp, color: Color(0xFF000000)),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: 20.h),
+
+                      // Sign-Up Text
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Don\'t have an account? ',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => SignUpScreen()),
+                              );
+                            },
+                            child: Text(
+                              'Sign Up',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
               ),
-
-              SizedBox(height: 20.h),
-
-              // Sign-Up Text
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Don\'t have an account? ',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignUpScreen()),
-                      );
-                    },
-                    child: Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
-        ),
-        ),
-        ],
-        ),
         );
       },
     );

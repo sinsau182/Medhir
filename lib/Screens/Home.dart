@@ -1,19 +1,52 @@
+import 'dart:convert'; // for json and jsonDecode
+import 'package:http/http.dart' as http; // for http requests
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:medhir/Screens/Login.dart';
-import 'package:medhir/Screens/SignUp.dart';
 import 'package:medhir/ThemeNotifier.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // Assuming you are using flutter_screenutil for screen sizing
+
 
 
 class HomeScreen extends StatelessWidget {
   final TextEditingController credController = TextEditingController();
 
+// Function to check if the email exists in a list of emails fetched via API
+  Future<bool> isEmailAvailable(String email) async {
+    try {
+      final apiUrl = 'http://13.201.224.161:5000/users/emails'; // Correct API route
+
+      // Send a GET request to fetch the list of emails
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      // Check if the request was successful
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body); // Decode the JSON response
+
+        // Check if the response contains the list of emails
+        if (responseBody is List) {
+          // Check if the provided email exists in the list
+          return responseBody.contains(email);
+        } else {
+          throw Exception('Invalid response format: Expected a list of emails.');
+        }
+      } else {
+        throw Exception('Failed to retrieve emails. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      return false; // Return false in case of an error, assume email does not exist
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
 
-    // Background gradients remain unchanged
     final lightGradient = LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
@@ -33,193 +66,209 @@ class HomeScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: themeNotifier.isDarkTheme ? darkGradient : lightGradient,
-        ),
-        child: Stack(
-          children: [
-            // Header with brand name (unchanged)
-            Positioned(
-              top: 60.h,
-              left: 40.w,
-              right: 40.w,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "MEDHIR",
-                    style: TextStyle(
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFF5F5DC),
-                      letterSpacing: 3.sp,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(3.w, 3.h),
-                          blurRadius: 8.r,
-                          color: Colors.black.withOpacity(0.6),
-                        ),
-                        Shadow(
-                          offset: Offset(-2.w, -2.h),
-                          blurRadius: 6.r,
-                          color: Colors.white.withOpacity(0.2),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Tagline text
-            Positioned(
-              top: 160.h,
-              left: 40.w,
-              right: 40.w,
-              child: GradientText(
-                "RUN YOUR BUSINESS\nNOT THE HASSLE",
-                gradient: LinearGradient(
-                  colors: [
-                    themeNotifier.isDarkTheme
-                        ? Colors.grey[300]!
-                        : Colors.grey[400]!,
-                    themeNotifier.isDarkTheme
-                        ? Colors.grey[500]!
-                        : Colors.grey[300]!,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-            ),
-
-            Positioned(
-              bottom: 200.h, // Adjusted to position above the "OR" line
-              left: 40.w,
-              right: 40.w,
-              child: Column(
-                children: [
-                  // Input field for mobile number or email address
-                  TextFieldDecoration(
-                    controller: credController,
-                    hintText: 'Email / Phone Number',
-                    prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
-                  ),
-                  SizedBox(height: 20.h),
-
-                  // Continue button
-                  SizedBox(
-                    width: 0.5.sw, // Button width as 50% of screen width
-                    child: ElevatedButton(
-                      onPressed: () {
-
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 204, 170, 0)),
-                        foregroundColor: MaterialStateProperty.all(Colors.white),
-                        minimumSize: MaterialStateProperty.all(Size(double.infinity, 50.h)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0.r),
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            gradient: themeNotifier.isDarkTheme ? darkGradient : lightGradient,
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 60.h,
+                left: 40.w,
+                right: 40.w,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "MEDHIR",
+                      style: TextStyle(
+                        fontSize: 26.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFF5F5DC),
+                        letterSpacing: 3.sp,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(3.w, 3.h),
+                            blurRadius: 8.r,
+                            color: Colors.black.withOpacity(0.6),
                           ),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Continue', style: TextStyle(fontSize: 18.sp, color: Color(0xFF000000))),
+                          Shadow(
+                            offset: Offset(-2.w, -2.h),
+                            blurRadius: 6.r,
+                            color: Colors.white.withOpacity(0.2),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            // Optimized "or" line component
-            Positioned(
-              top: 420.h, // Adjusted to fit the layout
-              left: 40.w,
-              right: 40.w,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      thickness: 1.5.h,
-                      color: themeNotifier.isDarkTheme
-                          ? Colors.grey[600]
-                          : Colors.grey[300],
-                    ),
+              Positioned(
+                top: 160.h,
+                left: 40.w,
+                right: 40.w,
+                child: GradientText(
+                  "RUN YOUR BUSINESS\nNOT THE HASSLE",
+                  gradient: LinearGradient(
+                    colors: [
+                      themeNotifier.isDarkTheme
+                          ? Colors.grey[300]!
+                          : Colors.grey[400]!,
+                      themeNotifier.isDarkTheme
+                          ? Colors.grey[500]!
+                          : Colors.grey[300]!,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                    child: Text(
-                      'or',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: themeNotifier.isDarkTheme
-                            ? Colors.grey[300]
-                            : Colors.grey[600],
-                        letterSpacing: 1.5.sp,
+                ),
+              ),
+
+              Positioned(
+                top: 250.h,
+                left: 40.w,
+                right: 40.w,
+                child: Column(
+                  children: [
+                    SizedBox(height: 20.h),
+                    TextButtonWidget(
+                      text: "Sign in with Google",
+                      onPressed: () {
+                        // Add Google login logic here
+                      },
+                      icon: Image.asset(
+                        'assets/google_icon.png', // Your custom icon path
+                        height: 30.0, // Adjust the size of the icon
+                        width: 30.0,
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      thickness: 1.5.h,
-                      color: themeNotifier.isDarkTheme
-                          ? Colors.grey[600]
-                          : Colors.grey[300],
+
+
+                    SizedBox(height: 20.h),
+                    TextButtonWidget(
+                      text: "Sign in with Facebook",
+                      onPressed: () {
+                        // Add Google login logic here
+                      },
+                      icon: Image.asset(
+                        'assets/facebook_icon.png', // Your custom icon path
+                        height: 30.0, // Adjust the size of the icon
+                        width: 30.0,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            // Four login option buttons
-            Positioned(
-              top: 250.h,
-              left: 40.w,
-              right: 40.w,
-              child: Column(
-                children: [
-                  SizedBox(height: 20.h),
-                  TextButtonWidget(
-                    text: "Sign in with Google",
-                    onPressed: () {
-                      // Add Google login logic here
-                    },
-                    icon: Image.asset(
-                      'assets/google_icon.png', // Your custom icon path
-                      height: 30.0, // Adjust the size of the icon
-                      width: 30.0,
+              Positioned(
+                bottom: 200.h,
+                left: 40.w,
+                right: 40.w,
+                child: Column(
+                  children: [
+                    TextFieldDecoration(
+                      controller: credController,
+                      hintText: 'Email / Phone Number',
+                      prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
                     ),
-                  ),
+                    SizedBox(height: 20.h),
 
+                    SizedBox(
+                      width: 0.5.sw,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          String email = credController.text.trim();
 
-                  SizedBox(height: 20.h),
-                  TextButtonWidget(
-                    text: "Sign in with Facebook",
-                    onPressed: () {
-                      // Add Google login logic here
-                    },
-                    icon: Image.asset(
-                      'assets/facebook_icon.png', // Your custom icon path
-                      height: 30.0, // Adjust the size of the icon
-                      width: 30.0,
+                          if (email.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Please enter an email")),
+                            );
+                            return;
+                          }
+
+                          bool emailExists = await isEmailAvailable(email);
+
+                          if (emailExists) {
+                            Navigator.pushNamed(context, '/login');
+                          } else {
+                            Navigator.pushNamed(context, '/signup');
+                          }
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 204, 170, 0)),
+                          foregroundColor: MaterialStateProperty.all(Colors.white),
+                          minimumSize: MaterialStateProperty.all(Size(double.infinity, 50.h)),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0.r),
+                            ),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Continue', style: TextStyle(fontSize: 18.sp, color: Color(0xFF000000))),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+
+              Positioned(
+                top: 420.h,
+                left: 40.w,
+                right: 40.w,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 1.5.h,
+                        color: themeNotifier.isDarkTheme
+                            ? Colors.grey[600]
+                            : Colors.grey[300],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      child: Text(
+                        'or',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: themeNotifier.isDarkTheme
+                              ? Colors.grey[300]
+                              : Colors.grey[600],
+                          letterSpacing: 1.5.sp,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        thickness: 1.5.h,
+                        color: themeNotifier.isDarkTheme
+                            ? Colors.grey[600]
+                            : Colors.grey[300],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+
+
 
 
 
@@ -303,14 +352,6 @@ class GradientText extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
 
 class TextFieldDecoration extends StatelessWidget {
   final TextEditingController controller;

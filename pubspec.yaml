@@ -61,10 +61,6 @@ flutter:
 
   assets:
     - assets/sample.jpg
-    - assets/illustration.png
-    - assets/illustration1.png
-    - assets/illustration2.png
-    - assets/rocket.png
     - assets/google_icon.png
     - assets/facebook_icon.png
 
@@ -109,7 +105,6 @@ flutter:
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
-
 
 flutter_native_splash:
   color: "#ffffff" # Background color for Android versions < 12
