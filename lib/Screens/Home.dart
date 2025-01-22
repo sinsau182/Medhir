@@ -5,12 +5,15 @@ import 'package:medhir/Screens/SignUp.dart';
 import 'package:medhir/ThemeNotifier.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+
 class HomeScreen extends StatelessWidget {
+  final TextEditingController credController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
 
-    // Define gradients for light and dark themes
+    // Background gradients remain unchanged
     final lightGradient = LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
@@ -36,10 +39,10 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            // Header with brand name
+            // Header with brand name (unchanged)
             Positioned(
-              top: 60.h, // Adjusted for screen height
-              left: 40.w, // Adjusted for screen width
+              top: 60.h,
+              left: 40.w,
               right: 40.w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     "MEDHIR",
                     style: TextStyle(
-                      fontSize: 26.sp, // Responsive font size
+                      fontSize: 26.sp,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFF5F5DC),
                       letterSpacing: 3.sp,
@@ -71,7 +74,7 @@ class HomeScreen extends StatelessWidget {
 
             // Tagline text
             Positioned(
-              top: 200.h,
+              top: 160.h,
               left: 40.w,
               right: 40.w,
               child: GradientText(
@@ -91,43 +94,122 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
-            // Illustration
             Positioned(
-              top: 260.h,
-              left: 40.w,
-              right: 40.w,
-              child: Image.asset(
-                'assets/rocket.png',
-                height: 300.h, // Adjusted for screen height
-                fit: BoxFit.contain,
-              ),
-            ),
-
-            // Buttons
-            Positioned(
-              bottom: 100.h,
+              bottom: 200.h, // Adjusted to position above the "OR" line
               left: 40.w,
               right: 40.w,
               child: Column(
                 children: [
-                  TextButtonWidget(
-                    text: "Login",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
+                  // Input field for mobile number or email address
+                  TextFieldDecoration(
+                    controller: credController,
+                    hintText: 'Email / Phone Number',
+                    prefixIcon: Icon(Icons.email_outlined, color: Colors.grey),
                   ),
                   SizedBox(height: 20.h),
+
+                  // Continue button
+                  SizedBox(
+                    width: 0.5.sw, // Button width as 50% of screen width
+                    child: ElevatedButton(
+                      onPressed: () {
+
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 204, 170, 0)),
+                        foregroundColor: MaterialStateProperty.all(Colors.white),
+                        minimumSize: MaterialStateProperty.all(Size(double.infinity, 50.h)),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0.r),
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Continue', style: TextStyle(fontSize: 18.sp, color: Color(0xFF000000))),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Optimized "or" line component
+            Positioned(
+              top: 420.h, // Adjusted to fit the layout
+              left: 40.w,
+              right: 40.w,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      thickness: 1.5.h,
+                      color: themeNotifier.isDarkTheme
+                          ? Colors.grey[600]
+                          : Colors.grey[300],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    child: Text(
+                      'or',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: themeNotifier.isDarkTheme
+                            ? Colors.grey[300]
+                            : Colors.grey[600],
+                        letterSpacing: 1.5.sp,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      thickness: 1.5.h,
+                      color: themeNotifier.isDarkTheme
+                          ? Colors.grey[600]
+                          : Colors.grey[300],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Four login option buttons
+            Positioned(
+              top: 250.h,
+              left: 40.w,
+              right: 40.w,
+              child: Column(
+                children: [
+                  SizedBox(height: 20.h),
                   TextButtonWidget(
-                    text: "Sign Up",
+                    text: "Sign in with Google",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignUpScreen()),
-                      );
+                      // Add Google login logic here
                     },
+                    icon: Image.asset(
+                      'assets/google_icon.png', // Your custom icon path
+                      height: 30.0, // Adjust the size of the icon
+                      width: 30.0,
+                    ),
+                  ),
+
+
+                  SizedBox(height: 20.h),
+                  TextButtonWidget(
+                    text: "Sign in with Facebook",
+                    onPressed: () {
+                      // Add Google login logic here
+                    },
+                    icon: Image.asset(
+                      'assets/facebook_icon.png', // Your custom icon path
+                      height: 30.0, // Adjust the size of the icon
+                      width: 30.0,
+                    ),
                   ),
                 ],
               ),
@@ -139,14 +221,18 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+
+
 // Custom Text Button widget
 class TextButtonWidget extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final Widget? icon; // Widget type for more flexibility (can be any widget, e.g., Image or Icon)
 
   const TextButtonWidget({
     required this.text,
     required this.onPressed,
+    this.icon, // Allow any widget as the icon
   });
 
   @override
@@ -164,19 +250,31 @@ class TextButtonWidget extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20.w),
         ),
         onPressed: onPressed,
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: "Poppins",
-            fontSize: 16.sp,
-            color: Colors.grey[800],
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min, // Wrap the content
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null) ...[
+              icon!, // Display the customized icon if provided
+              SizedBox(width: 8.0), // Space between icon and text
+            ],
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: "Poppins",
+                fontSize: 14.sp,
+                color: Colors.grey[800],
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
+
+
 
 // Gradient text widget
 class GradientText extends StatelessWidget {
@@ -201,6 +299,47 @@ class GradientText extends StatelessWidget {
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+class TextFieldDecoration extends StatelessWidget {
+  final TextEditingController controller;
+  final String hintText;
+  final bool obscureText;
+  final Icon prefixIcon;
+
+  TextFieldDecoration({
+    required this.controller,
+    required this.hintText,
+    this.obscureText = false,
+    required this.prefixIcon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Color(0xFFF8F9FA),
+        hintText: hintText,
+        hintStyle: TextStyle(color: Colors.grey[600], fontSize: 14.sp),
+        prefixIcon: prefixIcon,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0.r),
+        ),
+        contentPadding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.w),
       ),
     );
   }
