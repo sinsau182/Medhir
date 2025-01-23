@@ -67,7 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         );
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
+          MaterialPageRoute(builder: (context) => MainApp()),
         );
       } else {
         final errorMessage = json.decode(response.body)['message'] ??
