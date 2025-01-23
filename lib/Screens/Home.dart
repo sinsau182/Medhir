@@ -181,8 +181,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-
-
             Positioned(
               top: 250.h,
               left: 40.w,
