@@ -60,8 +60,7 @@ class MyApp extends StatelessWidget {
         ),
         child: HomePage(),
       ),
-      routes: {
-        '/login': (context) => LoginPage(),  // Replace with your Login page
+      routes: { // Replace with your Login page
         '/signup': (context) => SignUpScreen(), // Replace with your Signup page
       },
     );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:medhir/Screens/Login.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'app.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -12,11 +13,29 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _fnameController = TextEditingController();
+  final TextEditingController _lnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   final String _registerUrl = 'http://13.201.224.161:5000/register';
+
+  // To store the email passed from the HomeScreen
+  String? emailFromHome;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Retrieve the passed email argument, if any
+    emailFromHome = ModalRoute
+        .of(context)
+        ?.settings
+        .arguments as String?;
+    if (emailFromHome != null) {
+      _emailController.text =
+      emailFromHome!; // Pre-fill the email field if provided
+    }
+  }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
@@ -25,7 +44,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _registerUser() async {
-    final String name = _nameController.text;
+    final String fname = _fnameController.text;
+    final String lname = _lnameController.text;
     final String email = _emailController.text;
     final String password = _passwordController.text;
 
@@ -34,7 +54,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Uri.parse(_registerUrl),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
-          'name': name,
+          'fname': fname,
+          'lname': lname,
           'email': email,
           'password': password,
         }),
@@ -49,7 +70,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
       } else {
-        final errorMessage = json.decode(response.body)['message'] ?? 'Registration failed';
+        final errorMessage = json.decode(response.body)['message'] ??
+            'Registration failed';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errorMessage)),
         );
@@ -109,7 +131,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => LoginPage()),
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()),
                             );
                           },
                           child: Text(
@@ -126,14 +149,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(height: 30.h),
 
-
                   Form(
                     key: _formKey,
                     child: Column(
                       children: [
                         _buildInputField(
-                          controller: _nameController,
-                          hintText: 'Name',
+                          controller: _fnameController,
+                          hintText: 'First Name',
+                          icon: Icons.person_outline,
+                        ),
+                        SizedBox(height: 20.h),
+                        _buildInputField(
+                          controller: _lnameController,
+                          hintText: 'Last Name',
                           icon: Icons.person_outline,
                         ),
                         SizedBox(height: 20.h),
@@ -142,7 +170,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           hintText: 'Email',
                           icon: Icons.email_outlined,
                           keyboardType: TextInputType.emailAddress,
+                          isReadOnly: true, // Make the email field read-only
                         ),
+
                         SizedBox(height: 20.h),
                         _buildInputField(
                           controller: _passwordController,
@@ -171,8 +201,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               backgroundColor: MaterialStateProperty.all(
                                 Color(0xFFFFCC00),
                               ),
-                              foregroundColor: MaterialStateProperty.all(Colors.white),
-                              minimumSize: MaterialStateProperty.all(Size(double.infinity, 50.h)),
+                              foregroundColor: MaterialStateProperty.all(
+                                  Colors.white),
+                              minimumSize: MaterialStateProperty.all(
+                                  Size(double.infinity, 50.h)),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30.r),
@@ -217,14 +249,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
     required IconData icon,
     bool obscureText = false,
     TextInputType keyboardType = TextInputType.text,
+    bool isReadOnly = false, // New parameter for read-only state
   }) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
+      readOnly: isReadOnly,
+      // Make the field read-only
       decoration: InputDecoration(
         filled: true,
-        fillColor: Color(0xFFF8F9FA),
+        fillColor: isReadOnly ? Color(0xFFE0E0E0) : Color(0xFFF8F9FA),
+        // Light grey if read-only
         hintText: hintText,
         hintStyle: TextStyle(color: Colors.grey[600]),
         prefixIcon: Icon(icon, color: Colors.black),
@@ -243,5 +279,3 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
-
-
