@@ -181,51 +181,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // Positioned(
-            //   top: 420.h,  // Adjusted position for the bottom row
-            //   left: 40.w,
-            //   right: 40.w,
-            //   child: Column(
-            //     children: [
-            //       TextButtonWidget(
-            //         text: "Sign in with Google",
-            //         onPressed: () {
-            //           // Add Google login logic here
-            //         },
-            //         icon: Image.asset(
-            //           'assets/google_icon.png', // Your custom icon path
-            //           height: 30.0, // Adjust the size of the icon
-            //           width: 30.0,
-            //         ),
-            //       ),
-            //       SizedBox(height: 20.h),
-            //       TextButtonWidget(
-            //         text: "Sign in with Facebook",
-            //         onPressed: () {
-            //           // Add Facebook login logic here
-            //         },
-            //         icon: Image.asset(
-            //           'assets/facebook_icon.png', // Your custom icon path
-            //           height: 30.0, // Adjust the size of the icon
-            //           width: 30.0,
-            //         ),
-            //       ),
-            //       SizedBox(height: 20.h),
-            //       TextButtonWidget(
-            //         text: "Sign in with Instagram",
-            //         onPressed: () {
-            //           // Add Instagram login logic here
-            //         },
-            //         icon: Image.asset(
-            //           'assets/instagram_logo.png', // Your custom icon path
-            //           height: 30.0, // Adjust the size of the icon
-            //           width: 30.0,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-
 
 
             Positioned(
